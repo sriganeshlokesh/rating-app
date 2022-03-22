@@ -1,11 +1,18 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import Button from "./UI/Button.svelte";
   import Card from "./UI/Card.svelte";
+  import RatingSelect from "./RatingSelect.svelte";
+  import { v4 as uuid4 } from "uuid";
 
   let text = "";
   let btnDisabled = true;
   let min = 10;
   let errorMessage;
+
+  let rating = 10;
+
+  const dispatch = createEventDispatcher();
 
   const handleInput = () => {
     if (text.trim().length <= min) {
@@ -16,19 +23,35 @@
       btnDisabled = false;
     }
   };
+
+  const handleRating = (e) => (rating = e.detail);
+
+  const handleSubmit = () => {
+    if (text.trim().length > min) {
+      const newFeedback = {
+        id: uuid4(),
+        text,
+        rating: +rating,
+      };
+
+      dispatch("new-feedback", newFeedback);
+      text = "";
+    }
+  };
 </script>
 
 <Card>
   <header>
     <h2>How Would You Rate Your Service With Us?</h2>
   </header>
-  <form action="">
-    <!-- Rating Select -->
+  <form on:submit|preventDefault={handleSubmit}>
+    <RatingSelect on:rating-select={handleRating} />
     <div class="input-group">
       <input
         type="text"
         placeholder="Tell Us Something That Keeps You Coming Back"
         on:input={handleInput}
+        bind:value={text}
       />
       <Button disabled={btnDisabled} type="submit">Send</Button>
     </div>

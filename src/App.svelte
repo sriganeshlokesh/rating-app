@@ -28,10 +28,15 @@
     const feedId = e.detail;
     feedback = feedback.filter((feed) => feed.id !== feedId);
   };
+
+  const addFeedback = (e) => {
+    const newFeedback = e.detail;
+    feedback = [newFeedback, ...feedback];
+  };
 </script>
 
 <main class="container">
-  <FeedbackForm />
+  <FeedbackForm on:new-feedback={addFeedback} />
   <FeedbackStats {count} {average} />
   <FeedbackList {feedback} on:delete-feedback={deleteFeedback} />
 </main>
