@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { FeedbackStore } from "../stores/stores";
   import Button from "./UI/Button.svelte";
   import Card from "./UI/Card.svelte";
   import RatingSelect from "./RatingSelect.svelte";
@@ -11,8 +11,6 @@
   let errorMessage;
 
   let rating = 10;
-
-  const dispatch = createEventDispatcher();
 
   const handleInput = () => {
     if (text.trim().length <= min) {
@@ -34,7 +32,9 @@
         rating: +rating,
       };
 
-      dispatch("new-feedback", newFeedback);
+      FeedbackStore.update((currentFeedbackList) => {
+        return [newFeedback, ...currentFeedbackList];
+      });
       text = "";
     }
   };
