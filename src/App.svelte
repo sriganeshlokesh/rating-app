@@ -17,10 +17,19 @@
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. consequuntur vel vitae commodi alias voluptatem est voluptatum ipsa quae.",
     },
   ];
+
+  $: count = feedback.length;
+  $: average =
+    feedback.reduce((a, { rating }) => a + rating, 0) / feedback.length;
+
+  const deleteFeedback = (e) => {
+    const feedId = e.detail;
+    feedback = feedback.filter((feed) => feed.id !== feedId);
+  };
 </script>
 
 <main class="container">
-  <FeedbackList {feedback} />
+  <FeedbackList {feedback} on:delete-feedback={deleteFeedback} />
 </main>
 
 <style>

@@ -4,5 +4,5 @@
 </script>
 
 {#each feedback as feed (feed.id)}
-  <FeedbackItem {feed} />
+  <FeedbackItem {feed} on:delete-feedback />
 {/each}
